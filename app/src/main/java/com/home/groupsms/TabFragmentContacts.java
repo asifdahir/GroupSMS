@@ -18,15 +18,12 @@ public class TabFragmentContacts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_contacts, container, false);
 
-        RecyclerView recyclerView = null;
-        ContactsAdapter adapter = null;
+        MainActivity.ContactsAdapter = new ContactsAdapter(MainActivity.ListContacts);
 
-        adapter = new ContactsAdapter(MainActivity.ListContacts);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewContact);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        MainActivity.RecyclerViewContacts = (RecyclerView) view.findViewById(R.id.recyclerViewContact);
+        MainActivity.RecyclerViewContacts.setLayoutManager(new LinearLayoutManager(getContext()));
+        MainActivity.RecyclerViewContacts.setAdapter(MainActivity.ContactsAdapter);
+        MainActivity.RecyclerViewContacts.setItemAnimator(new DefaultItemAnimator());
 
         return view;
     }

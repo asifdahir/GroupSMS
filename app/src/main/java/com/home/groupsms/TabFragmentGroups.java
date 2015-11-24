@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 /**
  * Created by Administrator on 11/23/2015.
@@ -18,15 +19,12 @@ public class TabFragmentGroups extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_groups, container, false);
 
-        RecyclerView recyclerView = null;
-        GroupsAdapter adapter = null;
+        MainActivity.GroupsAdapter = new GroupsAdapter(MainActivity.ListGroups);
 
-        adapter = new GroupsAdapter(MainActivity.ListGroups);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewGroup);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        MainActivity.RecyclerViewGroups = (RecyclerView) view.findViewById(R.id.recyclerViewGroup);
+        MainActivity.RecyclerViewGroups.setLayoutManager(new LinearLayoutManager(getContext()));
+        MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
+        MainActivity.RecyclerViewGroups.setItemAnimator(new DefaultItemAnimator());
 
         return view;
     }
