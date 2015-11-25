@@ -32,8 +32,15 @@ public class TabFragmentContacts extends Fragment {
                 new RecyclerViewItemClickListener(getContext(), new RecyclerViewItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        TextView textView = (TextView) view.findViewById(R.id.text);
-                        Contact contact = new Contact("", textView.getText().toString(), "", "");
+
+                        ContactsAdapter.ViewHolder viewHolder = null;
+                        TextView textView = null;
+
+                        textView = (TextView) view.findViewById(R.id.text);
+                        viewHolder = (ContactsAdapter.ViewHolder) textView.getTag();
+                        Contact c = viewHolder.contact;
+
+                        Contact contact = new Contact(c.id, c.title, c.phone1, c.phone1Type);
                         MainActivity.ListSelectedContacts.add(contact);
                         //MainActivity.SelectedContactsAdapter.notifyDataSetChanged();
                     }

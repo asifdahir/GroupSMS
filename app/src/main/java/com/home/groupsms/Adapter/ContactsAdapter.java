@@ -36,6 +36,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         String value = String.format("%s\n%s (%s)",
                 mItems.get(position).title, mItems.get(position).phone1, mItems.get(position).phone1Type);
         viewHolder.textView.setText(value);
+        viewHolder.contact = mItems.get(position);
     }
 
     @Override
@@ -96,11 +97,13 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public Contact contact;
         public TextView textView;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             textView = (TextView) itemLayoutView.findViewById(R.id.text);
+            textView.setTag(this);
         }
     }
 }
