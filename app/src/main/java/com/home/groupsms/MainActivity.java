@@ -1,5 +1,6 @@
 package com.home.groupsms;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Group;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         // Show menu icon
         final ActionBar ab = getSupportActionBar();
-        //ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setHomeAsUpIndicator(R.drawable.ic_home);
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -72,15 +74,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        // TODO: 11/23/2015  will be in asyntask
-        ListGroups = Group.getGroups(this);
-        ListContacts = Contact.getContacts(this);
+        setContentView(R.layout.activity_main);
 
         setupToolbar();
         setupTabs();
-
     }
 
     @Override
