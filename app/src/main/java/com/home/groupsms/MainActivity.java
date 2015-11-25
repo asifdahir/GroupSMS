@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Group;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public static com.home.groupsms.Adapter.GroupsAdapter GroupsAdapter;
     public static com.home.groupsms.Adapter.ContactsAdapter ContactsAdapter;
     public static com.home.groupsms.Adapter.SelectedContactsAdapter SelectedContactsAdapter;
+    public static Hashtable<String, Boolean> HashtableSelectedContacts;
     public static RecyclerView RecyclerViewGroups;
     public static RecyclerView RecyclerViewContacts;
     public static RecyclerView RecyclerViewSelectedContacts;
@@ -100,17 +103,29 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         new ContactsLoadOperation().execute();
         new GroupsLoadOperation().execute();
         MainActivity.ListSelectedContacts = new ArrayList<>();
+        MainActivity.HashtableSelectedContacts = new Hashtable<>();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+            final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
             searchView.setOnQueryTextListener(this);
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_compose:
+                Toast.makeText(this, "compose", Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

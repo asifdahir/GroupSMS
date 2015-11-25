@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Group SMS</string>
     <string name="search">Search</string>
+    <string name="compose">Compose</string>
 </resources>

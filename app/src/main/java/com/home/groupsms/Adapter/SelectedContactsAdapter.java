@@ -4,7 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.R;
@@ -36,6 +38,13 @@ public class SelectedContactsAdapter extends RecyclerView.Adapter<SelectedContac
         String value = String.format("%s\n%s (%s)",
                 mItems.get(position).title, mItems.get(position).phone1, mItems.get(position).phone1Type);
         viewHolder.textView.setText(value);
+
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "c", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -46,10 +55,13 @@ public class SelectedContactsAdapter extends RecyclerView.Adapter<SelectedContac
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textView;
+        public Button button;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
+
             textView = (TextView) itemLayoutView.findViewById(R.id.text);
+            button = (Button) itemLayoutView.findViewById(R.id.button);
         }
     }
 }

@@ -40,10 +40,12 @@ public class TabFragmentContacts extends Fragment {
                         textView = (TextView) view.findViewById(R.id.text);
                         viewHolder = (ContactsAdapter.ViewHolder) textView.getTag();
                         Contact c = viewHolder.contact;
-
-                        Contact contact = new Contact(c.id, c.title, c.phone1, c.phone1Type);
-                        MainActivity.ListSelectedContacts.add(contact);
-                        //MainActivity.SelectedContactsAdapter.notifyDataSetChanged();
+                        if (!MainActivity.HashtableSelectedContacts.containsKey(c.phone1)) {
+                            Contact contact = new Contact(c.id, c.title, c.phone1, c.phone1Type);
+                            MainActivity.HashtableSelectedContacts.put(c.phone1, true);
+                            MainActivity.ListSelectedContacts.add(contact);
+                            //MainActivity.SelectedContactsAdapter.notifyDataSetChanged();
+                        }
                     }
                 })
         );
