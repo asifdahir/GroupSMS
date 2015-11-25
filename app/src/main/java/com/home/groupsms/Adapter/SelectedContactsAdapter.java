@@ -8,10 +8,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.home.groupsms.MainActivity;
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.R;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -20,9 +22,8 @@ import java.util.List;
 public class SelectedContactsAdapter extends RecyclerView.Adapter<SelectedContactsAdapter.ViewHolder> {
     private ArrayList<Contact> mItems;
 
-    public SelectedContactsAdapter(ArrayList<Contact> contacts) {
-
-        mItems = new ArrayList<>(contacts);
+    public SelectedContactsAdapter(Hashtable<String, Contact> contacts) {
+        mItems = new ArrayList<Contact>(contacts.values());
     }
 
     @Override
@@ -34,15 +35,18 @@ public class SelectedContactsAdapter extends RecyclerView.Adapter<SelectedContac
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        String value = String.format("%s\n%s (%s)",
-                mItems.get(position).title, mItems.get(position).phone1, mItems.get(position).phone1Type);
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        String value = String.format("%s\n%s (%s)", mItems.get(position).title, mItems.get(position).phone1, mItems.get(position).phone1Type);
         viewHolder.textView.setText(value);
-
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "c", Toast.LENGTH_SHORT).show();
+
+                MainActivity.HashtableSelectedContacts.remove(mItems.get(position).phone1);
+                mItems.remove(position);
+
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mItems.size());
             }
         });
     }

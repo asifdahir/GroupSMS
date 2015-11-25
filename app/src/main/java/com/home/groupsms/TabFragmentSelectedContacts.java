@@ -28,7 +28,8 @@ public class TabFragmentSelectedContacts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_selected_contacts, container, false);
 
-        MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.ListSelectedContacts);
+        //MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.ListSelectedContacts);
+        MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.HashtableSelectedContacts);
 
         MainActivity.RecyclerViewSelectedContacts = (RecyclerView) view.findViewById(R.id.recyclerViewSelectedContact);
         MainActivity.RecyclerViewSelectedContacts.setLayoutManager(new LinearLayoutManager(getContext()));

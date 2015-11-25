@@ -28,11 +28,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public static ArrayList<Group> ListGroups;
     public static ArrayList<Contact> ListContacts;
-    public static ArrayList<Contact> ListSelectedContacts;
     public static com.home.groupsms.Adapter.GroupsAdapter GroupsAdapter;
     public static com.home.groupsms.Adapter.ContactsAdapter ContactsAdapter;
     public static com.home.groupsms.Adapter.SelectedContactsAdapter SelectedContactsAdapter;
-    public static Hashtable<String, Boolean> HashtableSelectedContacts;
+    public static Hashtable<String, Contact> HashtableSelectedContacts;
     public static RecyclerView RecyclerViewGroups;
     public static RecyclerView RecyclerViewContacts;
     public static RecyclerView RecyclerViewSelectedContacts;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         // Show menu icon
         final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_home);
+        //ab.setHomeAsUpIndicator(R.drawable.ic_home);
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         new ContactsLoadOperation().execute();
         new GroupsLoadOperation().execute();
-        MainActivity.ListSelectedContacts = new ArrayList<>();
         MainActivity.HashtableSelectedContacts = new Hashtable<>();
     }
 
@@ -121,7 +119,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_compose:
-                Toast.makeText(this, "compose", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "compose", Toast.LENGTH_LONG).show();
+                if (MainActivity.HashtableSelectedContacts.size() <= 0) {
+                    Toast.makeText(this, "No recipient selected", Toast.LENGTH_SHORT).show();
+                } else {
+                    
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
