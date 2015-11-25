@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.home.groupsms.Adapter.ContactsAdapter;
 import com.home.groupsms.Model.Contact;
 
 /**
@@ -25,32 +28,18 @@ public class TabFragmentContacts extends Fragment {
         MainActivity.RecyclerViewContacts.setLayoutManager(new LinearLayoutManager(getContext()));
         MainActivity.RecyclerViewContacts.setItemAnimator(new DefaultItemAnimator());
 
-        new DataLoadOperation().execute();
+        MainActivity.RecyclerViewContacts.addOnItemTouchListener(
+                new RecyclerViewItemClickListener(getContext(), new RecyclerViewItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        TextView textView = (TextView) view.findViewById(R.id.text);
+                        Contact contact = new Contact("", textView.getText().toString(), "", "");
+                        MainActivity.ListSelectedContacts.add(contact);
+                        //MainActivity.SelectedContactsAdapter.notifyDataSetChanged();
+                    }
+                })
+        );
 
         return view;
-    }
-
-    private class DataLoadOperation extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            MainActivity.ListContacts = Contact.getContacts(getContext());
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void v) {
-            super.onPostExecute(v);
-            MainActivity.ContactsAdapter = new ContactsAdapter(MainActivity.ListContacts);
-            MainActivity.RecyclerViewContacts.setAdapter(MainActivity.ContactsAdapter);
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
     }
 }

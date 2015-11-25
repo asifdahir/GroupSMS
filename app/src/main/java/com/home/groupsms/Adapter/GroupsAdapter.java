@@ -1,4 +1,4 @@
-package com.home.groupsms;
+package com.home.groupsms.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.home.groupsms.Model.Group;
+import com.home.groupsms.R;
 
 import java.util.ArrayList;
 import java.util.List;

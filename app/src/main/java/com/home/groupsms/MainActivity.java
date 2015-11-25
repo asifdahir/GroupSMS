@@ -11,8 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.SearchView;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.home.groupsms.Adapter.ContactsAdapter;
+import com.home.groupsms.Adapter.GroupsAdapter;
+import com.home.groupsms.Adapter.PagerAdapter;
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Group;
 
@@ -23,10 +26,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public static ArrayList<Group> ListGroups;
     public static ArrayList<Contact> ListContacts;
-    public static GroupsAdapter GroupsAdapter;
-    public static ContactsAdapter ContactsAdapter;
+    public static ArrayList<Contact> ListSelectedContacts;
+    public static com.home.groupsms.Adapter.GroupsAdapter GroupsAdapter;
+    public static com.home.groupsms.Adapter.ContactsAdapter ContactsAdapter;
+    public static com.home.groupsms.Adapter.SelectedContactsAdapter SelectedContactsAdapter;
     public static RecyclerView RecyclerViewGroups;
     public static RecyclerView RecyclerViewContacts;
+    public static RecyclerView RecyclerViewSelectedContacts;
 
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -46,12 +52,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private void setupTabs() {
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mTabLayout.addTab(mTabLayout.newTab().setText("Contacts"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Group"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Groups"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Selected"));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), mTabLayout.getTabCount());
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -59,6 +65,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 mSelectedTab = tab.getPosition();
+                switch (mSelectedTab) {
+                    case 0:
+                        MainActivity.RecyclerViewContacts.setAdapter(MainActivity.ContactsAdapter);
+                        break;
+                    case 1:
+                        MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
+                        break;
+                    case 2:
+                        MainActivity.RecyclerViewSelectedContacts.setAdapter(MainActivity.SelectedContactsAdapter);
+                        break;
+                }
             }
 
             @Override
@@ -79,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         setupToolbar();
         setupTabs();
+
+        new ContactsLoadOperation().execute();
+        new GroupsLoadOperation().execute();
+        MainActivity.ListSelectedContacts = new ArrayList<>();
     }
 
     @Override
@@ -139,5 +160,53 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         }
         return filteredModelList;
+    }
+
+    private class ContactsLoadOperation extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MainActivity.ListContacts = Contact.getContacts(getApplicationContext());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            super.onPostExecute(v);
+            MainActivity.ContactsAdapter = new ContactsAdapter(MainActivity.ListContacts);
+            MainActivity.RecyclerViewContacts.setAdapter(MainActivity.ContactsAdapter);
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+    private class GroupsLoadOperation extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MainActivity.ListGroups = Group.getGroups(getApplicationContext());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+            super.onPostExecute(v);
+            MainActivity.GroupsAdapter = new GroupsAdapter(MainActivity.ListGroups);
+            MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
     }
 }

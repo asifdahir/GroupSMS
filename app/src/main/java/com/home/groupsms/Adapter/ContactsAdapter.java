@@ -1,4 +1,4 @@
-package com.home.groupsms;
+package com.home.groupsms.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.home.groupsms.Model.Contact;
-import com.home.groupsms.Model.Group;
+import com.home.groupsms.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.textView.setText(mItems.get(position).title);
+        String value = String.format("%s\n%s (%s)",
+                mItems.get(position).title, mItems.get(position).phone1, mItems.get(position).phone1Type);
+        viewHolder.textView.setText(value);
     }
 
     @Override

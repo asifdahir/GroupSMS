@@ -71,7 +71,13 @@ public class Contact {
                 cursorPhone.close();
             }
 
-            contact = new Contact(id, name, phone1, type1);
+            if (!phone1.equals(" "))
+                contact = new Contact(id, name, phone1, type1);
+            else if (!phone2.equals(" "))
+                contact = new Contact(id, name, phone2, type2);
+            else //if (!phone3.equals("unknown"))
+                contact = new Contact(id, name, phone3, type3);
+
             list.add(contact);
         }
 
