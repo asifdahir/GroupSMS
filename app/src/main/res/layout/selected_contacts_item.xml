@@ -23,6 +23,13 @@
             android:layout_margin="@dimen/controls_margin"
             android:textSize="@dimen/text_size" />
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/text"
+            android:text="Remove" />
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
