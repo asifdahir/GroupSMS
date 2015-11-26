@@ -1,5 +1,6 @@
 package com.home.groupsms;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -123,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 if (MainActivity.HashtableSelectedContacts.size() <= 0) {
                     Toast.makeText(this, "No recipient selected", Toast.LENGTH_SHORT).show();
                 } else {
-                    
+                    Intent intent = new Intent(MainActivity.this, ComposeSMS.class);
+                    startActivity(intent);
                 }
                 return true;
             default:
