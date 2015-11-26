@@ -16,6 +16,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.home.groupsms.Model.Contact;
+
+import java.util.Enumeration;
+
 /**
  * Created by Administrator on 11/26/2015.
  */
@@ -45,7 +49,12 @@ public class ComposeSMS extends AppCompatActivity {
 
         String message = editText.getText().toString();
 
-        sendSMS("03336384948", message);
+        Enumeration<String> key = MainActivity.HashtableSelectedContacts.keys();
+        while (key.hasMoreElements()) {
+            String s = key.nextElement();
+            Contact contact = MainActivity.HashtableSelectedContacts.get(s);
+            sendSMS(contact.phone1, message);
+        }
     }
 
     private void sendSMS(String phoneNumber, String message) {
