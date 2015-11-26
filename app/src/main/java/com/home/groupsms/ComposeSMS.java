@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,6 +23,8 @@ public class ComposeSMS extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Menu mMenu;
+    private BroadcastReceiver mBroadcastReceiverSMSSent;
+    private BroadcastReceiver mBroadcastReceiverSMSDelivered;
 
     private void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -39,7 +40,9 @@ public class ComposeSMS extends AppCompatActivity {
 
     private void sendSMS() {
         EditText editText = (EditText) findViewById(R.id.edit);
+        editText.setEnabled(false);
         mMenu.getItem(0).setVisible(false);
+
         String message = editText.getText().toString();
 
         sendSMS("03336384948", message);
@@ -49,16 +52,26 @@ public class ComposeSMS extends AppCompatActivity {
         String SENT = "SMS_SENT";
         String DELIVERED = "SMS_DELIVERED";
 
-        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
-        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
+        Intent intentSent;
+        Intent intentDelivered;
+        PendingIntent pendingIntentSent;
+        PendingIntent pendingIntentDelivered;
 
-        //---when the SMS has been sent---
-        registerReceiver(new BroadcastReceiver() {
+        intentSent = new Intent(SENT);
+        intentSent.putExtra("ID", phoneNumber);
+        intentDelivered = new Intent(DELIVERED);
+        intentDelivered.putExtra("ID", phoneNumber);
+
+        pendingIntentSent = PendingIntent.getBroadcast(this, 0, intentSent, 0);
+        pendingIntentDelivered = PendingIntent.getBroadcast(this, 0, intentDelivered, 0);
+
+        mBroadcastReceiverSMSSent = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context arg0, Intent arg1) {
+            public void onReceive(Context context, Intent intent) {
+                String phoneNumber = intent.getStringExtra("ID");
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "SMS sent to " + phoneNumber, Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getBaseContext(), "Generic failure", Toast.LENGTH_SHORT).show();
@@ -74,25 +87,31 @@ public class ComposeSMS extends AppCompatActivity {
                         break;
                 }
             }
-        }, new IntentFilter(SENT));
+        };
 
-        //---when the SMS has been delivered---
-        registerReceiver(new BroadcastReceiver() {
+        mBroadcastReceiverSMSDelivered = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context arg0, Intent arg1) {
+            public void onReceive(Context context, Intent intent) {
+                String phoneNumber = intent.getStringExtra("ID");
                 switch (getResultCode()) {
                     case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS delivered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "SMS delivered to " + phoneNumber, Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
                         Toast.makeText(getBaseContext(), "SMS not delivered", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
-        }, new IntentFilter(DELIVERED));
+        };
+
+        //---when the SMS has been sent---
+        registerReceiver(mBroadcastReceiverSMSSent, new IntentFilter(SENT));
+
+        //---when the SMS has been delivered---
+        registerReceiver(mBroadcastReceiverSMSDelivered, new IntentFilter(DELIVERED));
 
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+        sms.sendTextMessage(phoneNumber, null, message, pendingIntentSent, pendingIntentDelivered);
     }
 
     @Override
@@ -102,6 +121,14 @@ public class ComposeSMS extends AppCompatActivity {
         setContentView(R.layout.activity_compose_sms);
 
         setupToolbar();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mBroadcastReceiverSMSSent);
+        unregisterReceiver(mBroadcastReceiverSMSDelivered);
+
+        super.onDestroy();
     }
 
     @Override
