@@ -46,11 +46,13 @@ public class DBManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CREATE_GROUPS_TABLE = "CREATE TABLE " + TABLE_MESSAGES + "("
-                + RECIPIENTS_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + RECIPIENTS_KEY_SENT_DT + " TEXT"
+                + MESSAGES_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + MESSAGES_KEY_MESSAGE + " TEXT,"
+                + MESSAGES_KEY_DT + " TEXT"
                 + ")";
         String CREATE_MESSAGES_TABLE = "CREATE TABLE " + TABLE_RECIPIENTS + "("
                 + RECIPIENTS_KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + RECIPIENTS_KEY_MESSAGE_ID + " INTEGER,"
                 + RECIPIENTS_KEY_NAME + " TEXT,"
                 + RECIPIENTS_KEY_PHONE_NO + " TEXT,"
                 + RECIPIENTS_KEY_SENT_DT + " TEXT"
