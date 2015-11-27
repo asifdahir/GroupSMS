@@ -43,17 +43,28 @@ public class ComposeSMS extends AppCompatActivity {
     }
 
     private void sendSMS() {
-        EditText editText = (EditText) findViewById(R.id.edit);
+        DBManager dbManager = null;
+        EditText editText;
+        Contact contact;
+        String message;
+        String key;
+        Enumeration<String> enumKey;
+        int groupId;
+
+        editText = (EditText) findViewById(R.id.edit);
         editText.setEnabled(false);
+        message = editText.getText().toString();
         mMenu.getItem(0).setVisible(false);
 
-        String message = editText.getText().toString();
+        dbManager = new DBManager(this);
+        groupId = dbManager.addMessage(message);
 
-        Enumeration<String> key = MainActivity.HashtableSelectedContacts.keys();
-        while (key.hasMoreElements()) {
-            String s = key.nextElement();
-            Contact contact = MainActivity.HashtableSelectedContacts.get(s);
-            sendSMS(contact.phone1, message);
+        enumKey = MainActivity.HashtableSelectedContacts.keys();
+        while (enumKey.hasMoreElements()) {
+            key = enumKey.nextElement();
+            contact = MainActivity.HashtableSelectedContacts.get(key);
+
+            dbManager.addRecipient(groupId, contact);
         }
     }
 
