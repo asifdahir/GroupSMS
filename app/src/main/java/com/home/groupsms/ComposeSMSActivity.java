@@ -153,8 +153,15 @@ public class ComposeSMSActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mBroadcastReceiverSMSSent);
-        unregisterReceiver(mBroadcastReceiverSMSDelivered);
+        try {
+            unregisterReceiver(mBroadcastReceiverSMSSent);
+        } catch (Exception ex) {
+        }
+        
+        try {
+            unregisterReceiver(mBroadcastReceiverSMSDelivered);
+        } catch (Exception ex) {
+        }
 
         super.onDestroy();
     }
