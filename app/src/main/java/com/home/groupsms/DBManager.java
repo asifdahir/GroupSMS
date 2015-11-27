@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Message;
+import com.home.groupsms.Model.Recipient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,22 +82,21 @@ public class DBManager extends SQLiteOpenHelper {
         return (int) id;
     }
 
-    public String getMessage(int id) {
+    public Message getMessage(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_MESSAGES, new String[]{MESSAGES_KEY_ID,
                         MESSAGES_KEY_DT}, MESSAGES_KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
+        if (cursor == null)
+            return null;
 
-        String date = cursor.getString(1);
-
-        return date;
+        cursor.moveToFirst();
+        return new Message(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
     }
 
-    public List<String> getAllMessages() {
-        List<String> list = new ArrayList<String>();
+    public List<Message> getAllMessages() {
+        List<Message> list = new ArrayList<Message>();
         String selectQuery = "SELECT  * FROM " + TABLE_MESSAGES;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -104,7 +104,7 @@ public class DBManager extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                list.add(cursor.getString(1));
+                list.add(new Message(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
             } while (cursor.moveToNext());
         }
         return list;
@@ -126,14 +126,14 @@ public class DBManager extends SQLiteOpenHelper {
         db.close();
     }
 
-    public int addRecipient(int messageId, Contact contact) {
+    public int addRecipient(Recipient recipient) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(RECIPIENTS_KEY_MESSAGE_ID, messageId);
-        values.put(RECIPIENTS_KEY_NAME, contact.title);
-        values.put(RECIPIENTS_KEY_PHONE_NO, contact.phone1);
-        values.putNull(RECIPIENTS_KEY_SENT_DT);
+        values.put(RECIPIENTS_KEY_MESSAGE_ID, recipient.message_id);
+        values.put(RECIPIENTS_KEY_NAME, recipient.contact.title);
+        values.put(RECIPIENTS_KEY_PHONE_NO, recipient.contact.phone1);
+        values.put(RECIPIENTS_KEY_SENT_DT, recipient.sent_dt);
 
         long id = db.insert(TABLE_RECIPIENTS, null, values);
         db.close();
@@ -141,18 +141,69 @@ public class DBManager extends SQLiteOpenHelper {
         return (int) id;
     }
 
-    public Contact getRecipient(int id) {
+    public Recipient getRecipient(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_RECIPIENTS,
+                new String[]{
+                        RECIPIENTS_KEY_ID,
+                        RECIPIENTS_KEY_MESSAGE_ID,
+                        RECIPIENTS_KEY_SENT_DT,
+                        RECIPIENTS_KEY_NAME,
+                        RECIPIENTS_KEY_PHONE_NO
+                }, MESSAGES_KEY_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor == null)
+            return null;
+
+        cursor.moveToFirst();
+        return new Recipient(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
+                new Contact("", cursor.getString(3), cursor.getString(4), ""));
     }
 
-    public List<Contact> getAllRecipients() {
+    public List<Recipient> getAllRecipients() {
+        List<Recipient> list = new ArrayList<Recipient>();
+        String selectQuery = "SELECT  * FROM " + TABLE_RECIPIENTS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(new Recipient(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
+                        new Contact("", cursor.getString(3), cursor.getString(4), "")));
+            } while (cursor.moveToNext());
+        }
+        return list;
     }
 
     public int getRecipientsCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_RECIPIENTS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+
+        return cursor.getCount();
     }
 
-    public int updateRecipient(Contact contact) {
+    public int updateRecipient(Recipient recipient) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(RECIPIENTS_KEY_MESSAGE_ID, recipient.message_id);
+        values.put(RECIPIENTS_KEY_NAME, recipient.contact.title);
+        values.put(RECIPIENTS_KEY_PHONE_NO, recipient.contact.phone1);
+        values.put(RECIPIENTS_KEY_SENT_DT, recipient.sent_dt);
+
+        // updating row
+        return db.update(TABLE_RECIPIENTS, values, RECIPIENTS_KEY_ID + " = ?",
+                new String[]{String.valueOf(recipient.id)});
     }
 
-    public void deleteRecipient(Contact contact) {
+    public void deleteRecipient(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPIENTS, RECIPIENTS_KEY_ID + " = ?",
+                new String[]{String.valueOf(id)});
+        db.close();
     }
 }
