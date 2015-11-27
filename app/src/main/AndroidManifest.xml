@@ -35,12 +35,19 @@
         </activity>
 
         <activity
-            android:name=".ComposeSMS"
+            android:name=".ComposeSMSActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/compose"
+            android:label="@string/compose_sms"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
+        </activity>
 
+        <activity
+            android:name=".SMSStatusActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/sms_status"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
         </activity>
 
     </application>

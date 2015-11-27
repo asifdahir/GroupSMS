@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Group SMS</string>
     <string name="search">Search</string>
-    <string name="compose">Compose</string>
+    <string name="compose_sms">Compose SMS</string>
     <string name="send_sms">Send SMS</string>
+    <string name="sms_status">SMS Status</string>
 </resources>

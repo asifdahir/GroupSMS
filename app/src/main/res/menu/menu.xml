@@ -11,7 +11,7 @@
     <item
         android:id="@+id/action_compose"
         android:icon="@drawable/ic_sms"
-        android:title="@string/compose"
+        android:title="@string/compose_sms"
         app:showAsAction="ifRoom" />
 
 </menu>

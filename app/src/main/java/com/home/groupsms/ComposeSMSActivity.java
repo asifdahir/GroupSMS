@@ -17,13 +17,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.home.groupsms.Model.Contact;
+import com.home.groupsms.Model.Message;
+import com.home.groupsms.Model.Recipient;
 
 import java.util.Enumeration;
 
 /**
  * Created by Administrator on 11/26/2015.
  */
-public class ComposeSMS extends AppCompatActivity {
+public class ComposeSMSActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Menu mMenu;
@@ -39,17 +41,18 @@ public class ComposeSMS extends AppCompatActivity {
         final ActionBar ab = getSupportActionBar();
         //ab.setHomeAsUpIndicator(R.drawable.ic_home);
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Compose SMS");
+        ab.setTitle(R.string.compose_sms);
     }
 
     private void sendSMS() {
         DBManager dbManager = null;
         EditText editText;
         Contact contact;
+        Recipient recipient;
         String message;
         String key;
         Enumeration<String> enumKey;
-        int groupId;
+        int messageId;
 
         editText = (EditText) findViewById(R.id.edit);
         editText.setEnabled(false);
@@ -57,15 +60,20 @@ public class ComposeSMS extends AppCompatActivity {
         mMenu.getItem(0).setVisible(false);
 
         dbManager = new DBManager(this);
-        groupId = dbManager.addMessage(message);
+        messageId = dbManager.addMessage(new Message(-1, message, Common.getCurrentDateTime()));
 
         enumKey = MainActivity.HashtableSelectedContacts.keys();
         while (enumKey.hasMoreElements()) {
             key = enumKey.nextElement();
             contact = MainActivity.HashtableSelectedContacts.get(key);
 
-            dbManager.addRecipient(groupId, contact);
+            recipient = new Recipient(-1, messageId, null,
+                    new Contact(contact.id, contact.title, contact.phone1, contact.phone1Type));
+            dbManager.addRecipient(recipient);
         }
+
+        Intent intent = new Intent(this, SMSStatusActivity.class);
+        startActivity(intent);
     }
 
     private void sendSMS(String phoneNumber, String message) {
