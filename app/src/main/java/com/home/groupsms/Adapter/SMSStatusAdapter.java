@@ -25,7 +25,7 @@ public class SMSStatusAdapter extends RecyclerView.Adapter<SMSStatusAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_sms_status, null);
+        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.sms_status_item, null);
 
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
         return viewHolder;
@@ -33,8 +33,12 @@ public class SMSStatusAdapter extends RecyclerView.Adapter<SMSStatusAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        String value = String.format("%s\n%s (%s)",
-                mItems.get(position).contact.title, mItems.get(position).contact.phone1, mItems.get(position).contact.phone1Type);
+        String title = mItems.get(position).contact.title;
+        String phone1 = mItems.get(position).contact.phone1;
+        String sentDt = mItems.get(position).sent_dt;
+        if (sentDt == null)
+            sentDt = "not sent";
+        String value = String.format("%s\n%s - %s", title, phone1, sentDt);
         viewHolder.textView.setText(value);
         viewHolder.recipient = mItems.get(position);
     }

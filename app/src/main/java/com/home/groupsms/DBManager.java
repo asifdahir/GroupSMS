@@ -39,8 +39,10 @@ public class DBManager extends SQLiteOpenHelper {
     private static final String RECIPIENTS_KEY_SENT_DT = "sent_dt";
 
 
-    public DBManager(Context context) {
+    public DBManager(Context context, boolean recreateDatabase) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        if (recreateDatabase)
+            context.deleteDatabase(DATABASE_NAME);
     }
 
     @Override
@@ -70,7 +72,6 @@ public class DBManager extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-
     public int addMessage(Message message) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -87,7 +88,9 @@ public class DBManager extends SQLiteOpenHelper {
     public Message getMessage(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_MESSAGES, new String[]{MESSAGES_KEY_ID,
+        Cursor cursor = db.query(TABLE_MESSAGES, new String[]{
+                        MESSAGES_KEY_ID,
+                        MESSAGES_KEY_MESSAGE,
                         MESSAGES_KEY_DT}, MESSAGES_KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor == null)
@@ -163,17 +166,17 @@ public class DBManager extends SQLiteOpenHelper {
                 new Contact("", cursor.getString(3), cursor.getString(4), ""));
     }
 
-    public List<Recipient> getAllRecipients() {
+    public List<Recipient> getAllRecipients(int messageId) {
         List<Recipient> list = new ArrayList<Recipient>();
-        String selectQuery = "SELECT  * FROM " + TABLE_RECIPIENTS;
+        String selectQuery = "SELECT  * FROM " + TABLE_RECIPIENTS + " WHERE " + RECIPIENTS_KEY_MESSAGE_ID + "=" + messageId;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                list.add(new Recipient(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),
-                        new Contact("", cursor.getString(3), cursor.getString(4), "")));
+                list.add(new Recipient(cursor.getInt(0), cursor.getInt(1), cursor.getString(4),
+                        new Contact("", cursor.getString(2), cursor.getString(3), "")));
             } while (cursor.moveToNext());
         }
         return list;
