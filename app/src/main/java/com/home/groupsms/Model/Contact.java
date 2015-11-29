@@ -60,25 +60,29 @@ public class Contact {
                     if (phonetype.equalsIgnoreCase("1")) {
                         phone1 = MainNumber;
                         type1 = "Home";
+                        contact = new Contact(id, name, phone1, type1);
                     } else if (phonetype.equalsIgnoreCase("2")) {
                         phone2 = MainNumber;
                         type2 = "Mobile";
+                        contact = new Contact(id, name, phone2, type2);
                     } else {
                         phone3 = MainNumber;
                         type3 = "Work";
+                        contact = new Contact(id, name, phone3, type3);
                     }
+                    list.add(contact);
                 }
                 cursorPhone.close();
             }
 
-            if (!phone1.equals(" "))
+            /*if (!phone1.equals(" "))
                 contact = new Contact(id, name, phone1, type1);
             else if (!phone2.equals(" "))
                 contact = new Contact(id, name, phone2, type2);
             else //if (!phone3.equals("unknown"))
                 contact = new Contact(id, name, phone3, type3);
 
-            list.add(contact);
+            list.add(contact);*/
         }
 
         return list;

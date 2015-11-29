@@ -53,9 +53,9 @@ public class ComposeSMSActivity extends AppCompatActivity {
         int messageId;
 
         editText = (EditText) findViewById(R.id.edit);
-        editText.setEnabled(false);
+        //editText.setEnabled(false);
         message = editText.getText().toString();
-        mMenu.getItem(0).setVisible(false);
+        //mMenu.getItem(0).setVisible(false);
 
         dbManager = new DBManager(this, true);
         messageId = dbManager.addMessage(new Message(-1, message, Common.getCurrentDateTime()));

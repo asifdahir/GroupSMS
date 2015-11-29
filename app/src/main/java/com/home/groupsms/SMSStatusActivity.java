@@ -27,6 +27,7 @@ public class SMSStatusActivity extends AppCompatActivity {
     private SMSStatusAdapter mAdapter;
     private Message mMessage;
     private ArrayList<Recipient> mListRecipients;
+    private SMSService mSMSService;
 
     private void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,6 +76,13 @@ public class SMSStatusActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mSMSService != null)
+            mSMSService.unregisterReceivers();
+        super.onDestroy();
+    }
+
     private class SMSServiceOperation extends AsyncTask<Void, Void, String> {
         private Context mContext;
 
@@ -84,9 +92,9 @@ public class SMSStatusActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... voids) {
-            SMSService smsService = new SMSService(mContext);
+            mSMSService = new SMSService(mContext);
             for (Recipient recipient : mListRecipients) {
-                smsService.sendSMS(mMessage.id, recipient.id, recipient.contact.phone1, mMessage.message);
+                mSMSService.sendSMS(mMessage.id, recipient.id, recipient.contact.phone1, mMessage.message);
             }
             return null;
         }

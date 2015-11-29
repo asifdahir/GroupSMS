@@ -19,28 +19,11 @@ public class SMSService {
     private Context mContext;
     private BroadcastReceiver mBroadcastReceiverSMSSent;
     private BroadcastReceiver mBroadcastReceiverSMSDelivered;
+    private final String SENT = "SMS_SENT";
+    private final String DELIVERED = "SMS_DELIVERED";
 
     public SMSService(Context context) {
         mContext = context;
-    }
-
-    public void sendSMS(int messageId, int recipientId, String phoneNumber, String message) {
-        String SENT = "SMS_SENT";
-        String DELIVERED = "SMS_DELIVERED";
-
-        Intent intentSent;
-        Intent intentDelivered;
-        PendingIntent pendingIntentSent;
-        PendingIntent pendingIntentDelivered;
-
-        intentSent = new Intent(SENT);
-        intentSent.putExtra("MESSAGE_ID", messageId);
-        intentSent.putExtra("RECIPIENT_ID", recipientId);
-        intentDelivered = new Intent(DELIVERED);
-        //intentDelivered.putExtra("RECIPIENT_ID", recipientId);
-
-        pendingIntentSent = PendingIntent.getBroadcast(mContext, 0, intentSent, 0);
-        pendingIntentDelivered = PendingIntent.getBroadcast(mContext, 0, intentDelivered, 0);
 
         mBroadcastReceiverSMSSent = new BroadcastReceiver() {
             @Override
@@ -95,6 +78,23 @@ public class SMSService {
         //---when the SMS has been delivered---
         mContext.registerReceiver(mBroadcastReceiverSMSDelivered, new IntentFilter(DELIVERED));
 
+    }
+
+    public void sendSMS(int messageId, int recipientId, String phoneNumber, String message) {
+        Intent intentSent;
+        Intent intentDelivered;
+        PendingIntent pendingIntentSent;
+        PendingIntent pendingIntentDelivered;
+
+        intentSent = new Intent(SENT);
+        intentSent.putExtra("MESSAGE_ID", messageId);
+        intentSent.putExtra("RECIPIENT_ID", recipientId);
+        intentDelivered = new Intent(DELIVERED);
+        //intentDelivered.putExtra("RECIPIENT_ID", recipientId);
+
+        pendingIntentSent = PendingIntent.getBroadcast(mContext, 0, intentSent, 0);
+        pendingIntentDelivered = PendingIntent.getBroadcast(mContext, 0, intentDelivered, 0);
+
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, message, pendingIntentSent, pendingIntentDelivered);
     }
@@ -109,6 +109,5 @@ public class SMSService {
             mContext.unregisterReceiver(mBroadcastReceiverSMSDelivered);
         } catch (Exception ex) {
         }
-
     }
 }
