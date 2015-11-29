@@ -1,6 +1,5 @@
 package com.home.groupsms;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.home.groupsms.Adapter.ContactsAdapter;
 import com.home.groupsms.Adapter.GroupsAdapter;
-import com.home.groupsms.Adapter.SelectedContactsAdapter;
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Group;
 

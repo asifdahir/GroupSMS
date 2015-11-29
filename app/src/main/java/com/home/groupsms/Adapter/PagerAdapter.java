@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.home.groupsms.TabFragmentContacts;
 import com.home.groupsms.TabFragmentGroups;
 import com.home.groupsms.TabFragmentSelectedContacts;
 
@@ -25,12 +24,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                TabFragmentContacts tabFragmentContacts = new TabFragmentContacts();
-                return tabFragmentContacts;
-            case 1:
                 TabFragmentGroups tabFragmentGroups = new TabFragmentGroups();
                 return tabFragmentGroups;
-            case 2:
+            case 1:
                 TabFragmentSelectedContacts tabFragmentSelectedContacts = new TabFragmentSelectedContacts();
                 return tabFragmentSelectedContacts;
             default:

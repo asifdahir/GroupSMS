@@ -12,6 +12,10 @@
         android:id="@+id/action_compose"
         android:icon="@drawable/ic_sms"
         android:title="@string/compose_sms"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_clear_selected_contacts"
+        android:title="@string/clear_selected_contacts" />
 
 </menu>

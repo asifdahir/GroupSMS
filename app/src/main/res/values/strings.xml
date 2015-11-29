@@ -4,4 +4,5 @@
     <string name="compose_sms">Compose SMS</string>
     <string name="send_sms">Send SMS</string>
     <string name="sms_status">SMS Status</string>
+    <string name="clear_selected_contacts">Clear Selected Contacts</string>
 </resources>
