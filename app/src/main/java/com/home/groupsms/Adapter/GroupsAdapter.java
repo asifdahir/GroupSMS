@@ -33,6 +33,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         viewHolder.textView.setText(mItems.get(position).title);
+        viewHolder.group = mItems.get(position);
     }
 
     @Override
@@ -93,11 +94,13 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public Group group;
         public TextView textView;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             textView = (TextView) itemLayoutView.findViewById(R.id.text);
+            textView.setTag(this);
         }
     }
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.home.groupsms.Adapter.ContactsAdapter;
 import com.home.groupsms.Adapter.GroupsAdapter;
 import com.home.groupsms.Adapter.PagerAdapter;
+import com.home.groupsms.Adapter.SelectedContactsAdapter;
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Group;
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
                         break;
                     case 2:
+                        MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.HashtableSelectedContacts);
                         MainActivity.RecyclerViewSelectedContacts.setAdapter(MainActivity.SelectedContactsAdapter);
                         break;
                 }

@@ -27,11 +27,13 @@ public class Contact {
 
         ArrayList<Contact> list;
         Contact contact;
+        Cursor cursor;
 
         list = new ArrayList<Contact>();
 
-        Cursor cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
+        cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null,
                 ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
         String id = null, name = null, phone = null;
         String phone1 = "unknown", phone2 = "unknown", phone3 = "unknown", type1 = "unknown", type2 = "unknown", type3 = "unknown";
 
@@ -74,17 +76,66 @@ public class Contact {
                 }
                 cursorPhone.close();
             }
-
-            /*if (!phone1.equals(" "))
-                contact = new Contact(id, name, phone1, type1);
-            else if (!phone2.equals(" "))
-                contact = new Contact(id, name, phone2, type2);
-            else //if (!phone3.equals("unknown"))
-                contact = new Contact(id, name, phone3, type3);
-
-            list.add(contact);*/
         }
+        return list;
+    }
 
+    public static ArrayList<Contact> getContacts(Context context, String groupId) {
+
+        ArrayList<Contact> list;
+        Contact contact;
+        Cursor cursor;
+
+        list = new ArrayList<Contact>();
+
+        cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI,
+                null,
+                ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + "=" + groupId, null,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
+        String id = null, name = null, phone = null;
+        String phone1 = "unknown", phone2 = "unknown", phone3 = "unknown", type1 = "unknown", type2 = "unknown", type3 = "unknown";
+
+        while (cursor.moveToNext()) {
+
+            id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID));
+            name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+            if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+
+                Cursor cursorPhone = context.getContentResolver()
+                        .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id},
+                                null);
+
+                phone1 = " ";
+                phone2 = " ";
+                phone3 = " ";
+                while (cursorPhone.moveToNext()) {
+                    String phonetype = cursorPhone.getString(cursorPhone
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                    String MainNumber = cursorPhone.getString(cursorPhone
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                    if (phonetype.equalsIgnoreCase("1")) {
+                        phone1 = MainNumber;
+                        type1 = "Home";
+                        contact = new Contact(id, name, phone1, type1);
+                    } else if (phonetype.equalsIgnoreCase("2")) {
+                        phone2 = MainNumber;
+                        type2 = "Mobile";
+                        contact = new Contact(id, name, phone2, type2);
+                    } else {
+                        phone3 = MainNumber;
+                        type3 = "Work";
+                        contact = new Contact(id, name, phone3, type3);
+                    }
+                    list.add(contact);
+                }
+                cursorPhone.close();
+            }
+        }
         return list;
     }
 }
