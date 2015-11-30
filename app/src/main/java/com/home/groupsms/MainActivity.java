@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewParent;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import com.home.groupsms.Adapter.PagerAdapter;
 import com.home.groupsms.Adapter.SelectedContactsAdapter;
 import com.home.groupsms.Model.Contact;
 import com.home.groupsms.Model.Group;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -75,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     case 1:
                         MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.HashtableSelectedContacts);
                         MainActivity.RecyclerViewSelectedContacts.setAdapter(MainActivity.SelectedContactsAdapter);
+
+                        View view = getSupportFragmentManager().getFragments().get(1).getView();
+                        TextView textView = (TextView) view.findViewById(R.id.text);
+                        textView.setText(MainActivity.SelectedContactsAdapter.getItemCount() + " Items");
                         break;
                 }
             }
@@ -93,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         MainActivity.HashtableSelectedContacts.clear();
         MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.HashtableSelectedContacts);
         MainActivity.RecyclerViewSelectedContacts.setAdapter(MainActivity.SelectedContactsAdapter);
-        //MainActivity.SelectedContactsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -187,11 +193,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
             mTabLayout.invalidate();
 
-            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            PagerAdapter pagerAdapter = viewPager.getAdapter();
-
-            TextView textView = (TextView) mTabLayout.getTabAt(0).getCustomView().findViewById(R.id.text);
-            textView.setText("" + MainActivity.GroupsAdapter.getItemCount() + " items");
+            View view = getSupportFragmentManager().getFragments().get(0).getView();
+            TextView textView = (TextView) view.findViewById(R.id.text);
+            textView.setText(MainActivity.GroupsAdapter.getItemCount() + " Items");
         }
 
         @Override

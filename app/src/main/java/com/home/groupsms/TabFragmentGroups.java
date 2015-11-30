@@ -49,7 +49,6 @@ public class TabFragmentGroups extends Fragment {
                             if (!MainActivity.HashtableSelectedContacts.containsKey(c.phone1)) {
                                 Contact contact = new Contact(c.id, c.title, c.phone1, c.phone1Type);
                                 MainActivity.HashtableSelectedContacts.put(c.phone1, contact);
-                                //MainActivity.SelectedContactsAdapter.notifyDataSetChanged();
                             }
                         }
                     }
