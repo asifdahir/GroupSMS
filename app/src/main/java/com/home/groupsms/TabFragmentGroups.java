@@ -26,6 +26,9 @@ public class TabFragmentGroups extends Fragment {
 
         View view = inflater.inflate(R.layout.tab_fragment_groups, container, false);
 
+        TextView textView = (TextView) view.findViewById(R.id.text);
+        textView.setText("No Item");
+
         MainActivity.RecyclerViewGroups = (RecyclerView) view.findViewById(R.id.recyclerViewGroup);
         MainActivity.RecyclerViewGroups.setLayoutManager(new LinearLayoutManager(getContext()));
         MainActivity.RecyclerViewGroups.setItemAnimator(new DefaultItemAnimator());

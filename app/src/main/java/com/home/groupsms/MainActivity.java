@@ -14,7 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewParent;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.home.groupsms.Adapter.GroupsAdapter;
@@ -182,8 +184,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             MainActivity.GroupsAdapter = new GroupsAdapter(MainActivity.ListGroups);
             if (MainActivity.RecyclerViewGroups != null) {
                 MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
-                mTabLayout.invalidate();
             }
+            mTabLayout.invalidate();
+
+            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            PagerAdapter pagerAdapter = viewPager.getAdapter();
+
+            TextView textView = (TextView) mTabLayout.getTabAt(0).getCustomView().findViewById(R.id.text);
+            textView.setText("" + MainActivity.GroupsAdapter.getItemCount() + " items");
         }
 
         @Override
