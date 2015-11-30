@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -178,7 +180,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         protected void onPostExecute(Void v) {
             super.onPostExecute(v);
             MainActivity.GroupsAdapter = new GroupsAdapter(MainActivity.ListGroups);
-            MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
+            if (MainActivity.RecyclerViewGroups != null) {
+                MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
+                mTabLayout.invalidate();
+            }
         }
 
         @Override

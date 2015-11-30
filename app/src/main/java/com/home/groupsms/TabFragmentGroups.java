@@ -23,6 +23,7 @@ public class TabFragmentGroups extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.tab_fragment_groups, container, false);
 
         MainActivity.RecyclerViewGroups = (RecyclerView) view.findViewById(R.id.recyclerViewGroup);

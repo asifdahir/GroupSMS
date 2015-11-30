@@ -20,16 +20,14 @@
             android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/controls_margin"
             android:textSize="@dimen/text_size" />
 
         <Button
             android:id="@+id/button"
-            android:layout_width="70dp"
+            android:layout_width="45dp"
             android:layout_height="35dp"
             android:layout_alignRight="@id/text"
-            android:layout_below="@id/text"
-            android:text="Remove"
+            android:text="Del"
             android:textSize="10sp" />
 
     </RelativeLayout>
