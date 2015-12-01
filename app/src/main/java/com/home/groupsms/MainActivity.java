@@ -74,14 +74,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 switch (mSelectedTab) {
                     case 0:
                         MainActivity.RecyclerViewGroups.setAdapter(MainActivity.GroupsAdapter);
+                        updateItemsCount(0);
                         break;
                     case 1:
                         MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.HashtableSelectedContacts);
                         MainActivity.RecyclerViewSelectedContacts.setAdapter(MainActivity.SelectedContactsAdapter);
-
-                        View view = getSupportFragmentManager().getFragments().get(1).getView();
-                        TextView textView = (TextView) view.findViewById(R.id.text);
-                        textView.setText(MainActivity.SelectedContactsAdapter.getItemCount() + " Items");
+                        updateItemsCount(1);
                         break;
                 }
             }
@@ -96,10 +94,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         });
     }
 
+    public void updateItemsCount(int tab) {
+        View view;
+        List<Fragment> fragments = null;
+        TextView textView;
+
+        fragments = getSupportFragmentManager().getFragments();
+        if (fragments == null)
+            return;
+        if (fragments.size() <= 0)
+            return;
+
+        if (tab == 0) {
+            view = fragments.get(0).getView();
+            textView = (TextView) view.findViewById(R.id.text);
+            textView.setText(MainActivity.GroupsAdapter.getItemCount() + " Items");
+        } else //if (tab == 1)
+        {
+            view = fragments.get(1).getView();
+            textView = (TextView) view.findViewById(R.id.text);
+            textView.setText(MainActivity.SelectedContactsAdapter.getItemCount() + " Items");
+        }
+    }
+
     private void clearSelectedContacts() {
         MainActivity.HashtableSelectedContacts.clear();
         MainActivity.SelectedContactsAdapter = new SelectedContactsAdapter(MainActivity.HashtableSelectedContacts);
         MainActivity.RecyclerViewSelectedContacts.setAdapter(MainActivity.SelectedContactsAdapter);
+        updateItemsCount(1);
     }
 
     @Override
@@ -193,9 +215,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
             mTabLayout.invalidate();
 
-            View view = getSupportFragmentManager().getFragments().get(0).getView();
-            TextView textView = (TextView) view.findViewById(R.id.text);
-            textView.setText(MainActivity.GroupsAdapter.getItemCount() + " Items");
+            updateItemsCount(0);
         }
 
         @Override

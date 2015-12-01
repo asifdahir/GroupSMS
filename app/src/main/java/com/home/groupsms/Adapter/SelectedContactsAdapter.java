@@ -1,9 +1,11 @@
 package com.home.groupsms.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,18 +37,19 @@ public class SelectedContactsAdapter extends RecyclerView.Adapter<SelectedContac
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
         String value = String.format("%s\n%s (%s)", mItems.get(position).title, mItems.get(position).phone1, mItems.get(position).phone1Type);
         viewHolder.textView.setText(value);
         viewHolder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 MainActivity.HashtableSelectedContacts.remove(mItems.get(position).phone1);
                 mItems.remove(position);
 
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, mItems.size());
+
+                ((MainActivity) view.getContext()).updateItemsCount(1);
             }
         });
     }
