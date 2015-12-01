@@ -38,7 +38,7 @@ public class SMSStatusAdapter extends RecyclerView.Adapter<SMSStatusAdapter.View
         String sentDt = mItems.get(position).sent_dt;
         if (sentDt == null)
             sentDt = "not sent";
-        String value = String.format("%s\n%s - %s", title, phone1, sentDt);
+        String value = String.format("%s(%s)\n%s", title, phone1, sentDt);
         viewHolder.textView.setText(value);
         viewHolder.recipient = mItems.get(position);
     }

@@ -92,7 +92,7 @@ public class SMSService {
         intentDelivered = new Intent(DELIVERED);
         //intentDelivered.putExtra("RECIPIENT_ID", recipientId);
 
-        pendingIntentSent = PendingIntent.getBroadcast(mContext, 0, intentSent, 0);
+        pendingIntentSent = PendingIntent.getBroadcast(mContext, recipientId, intentSent, 0);
         pendingIntentDelivered = PendingIntent.getBroadcast(mContext, 0, intentDelivered, 0);
 
         SmsManager sms = SmsManager.getDefault();
