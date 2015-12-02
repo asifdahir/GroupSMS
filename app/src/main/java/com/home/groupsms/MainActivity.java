@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         // Show menu icon
         final ActionBar ab = getSupportActionBar();
         //ab.setHomeAsUpIndicator(R.drawable.ic_home);
-        ab.setDisplayHomeAsUpEnabled(true);
+        //ab.setDisplayHomeAsUpEnabled(true);
     }
 
     private void setupTabs() {
